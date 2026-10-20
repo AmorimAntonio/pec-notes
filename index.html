@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEC Notes — Patch Notes do Servidor Brasil</title>
+    
+    <!-- Google Fonts (Inter & JetBrains Mono) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#1e1b4b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        /* Glassmorphism & Glow Effects */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(9, 13, 22, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glow-purple:hover {
+            box-shadow: 0 0 25px -5px rgba(168, 85, 247, 0.25);
+            border-color: rgba(168, 85, 247, 0.4);
+        }
+
+        .glow-emerald:hover {
+            box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.4);
+        }
+
+        .glow-amber:hover {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25);
+            border-color: rgba(245, 158, 11, 0.4);
+        }
+
+        .glow-rose:hover {
+            box-shadow: 0 0 25px -5px rgba(244, 63, 94, 0.25);
+            border-color: rgba(244, 63, 94, 0.4);
+        }
+
+        /* Scanline animation overlay */
+        .scanline {
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.2));
+            background-size: 100% 4px;
+        }
+
+        /* Modal Animation */
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-modal {
+            animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body class="bg-[#090d16] text-slate-100 min-h-screen font-sans selection:bg-violet-500 selection:text-white pb-16">
+
+    <!-- NAVBAR FIXA -->
+    <header class="sticky top-0 z-40 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- BRANDING LOGO -->
+            <div class="flex items-center gap-3">
+                <div class="h-11 w-11 rounded-xl bg-gradient-to-tr from-violet-600 via-indigo-500 to-cyan-400 p-[1px] shadow-lg shadow-indigo-500/20">
+                    <div class="h-full w-full bg-[#090d16] rounded-[11px] flex items-center justify-center">
+                        <i data-lucide="terminal" class="w-5 h-5 text-violet-400"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+                            PEC <span class="text-violet-400 font-mono">NOTES</span>
+                        </h1>
+                        <span class="px-2 py-0.5 text-[10px] font-mono font-bold tracking-wider uppercase bg-violet-950/80 text-violet-300 border border-violet-700/50 rounded-full">
+                            PATCH 2026.10
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 font-medium hidden sm:block">
+                        Servidor Brasil &bull; Atualizações Constitucionais
+                    </p>
+                </div>
+            </div>
+
+            <!-- SEARCH BAR -->
+            <div class="flex-1 max-w-md relative hidden md:block">
+                <div class="relative">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        placeholder="Buscar por PEC, nome comum, autor ou partido..." 
+                        class="w-full bg-slate-900/90 border border-slate-800 rounded-xl pl-10 pr-10 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all font-sans"
+                    >
+                    <button id="clear-search" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-1">
+                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- QUICK STATS BADGE -->
+            <div class="flex items-center gap-3">
+                <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-slate-800/80 text-xs text-slate-300 font-mono">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>Status do Servidor: <strong class="text-emerald-400 font-semibold">ONLINE</strong></span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- MOBILE SEARCH BAR (Exibida apenas no mobile) -->
+        <div class="px-4 pb-3 md:hidden">
+            <div class="relative">
+                <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                <input 
+                    type="text" 
+                    id="search-input-mobile"
+                    placeholder="Buscar PEC, nome ou autor..." 
+                    class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-10 pr-10 py-2 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-violet-500"
+                >
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO BANNER -->
+    <section class="relative overflow-hidden border-b border-slate-800/60 bg-gradient-to-b from-slate-950 via-[#0b101d] to-[#090d16] py-10 lg:py-14">
+        <!-- Background Glow Orbs -->
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                
+                <div class="max-w-2xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-300 text-xs font-semibold uppercase tracking-wider mb-4">
+                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                        <span>Relatório de Alterações de Regras</span>
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-4 leading-tight">
+                        Acompanhe as PECs como <span class="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-400">Patch Notes</span>.
+                    </h2>
+                    <p class="text-slate-400 text-base sm:text-lg leading-relaxed">
+                        Entenda o impacto das Propostas de Emenda à Constituição com resumo direto dos pontos alterados, status de votação e placar nominal de cada parlamentar.
+                    </p>
+                </div>
+
+                <!-- DASHBOARD COUNTERS -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 w-full lg:w-auto min-w-[320px]">
+                    <div class="glass-panel p-4 rounded-2xl border border-slate-800">
+                        <div class="text-xs text-slate-400 font-mono mb-1">Total no Patch</div>
+                        <div class="text-2xl font-extrabold text-white font-mono" id="stat-total">10</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl border border-violet-800/40 bg-violet-950/10">
+                        <div class="text-xs text-violet-300 font-mono mb-1">Destaques</div>
+                        <div class="text-2xl font-extrabold text-violet-400 font-mono" id="stat-destaque">2</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl border border-amber-800/40 bg-amber-950/10">
+                        <div class="text-xs text-amber-300 font-mono mb-1">Em Tramitação</div>
+                        <div class="text-2xl font-extrabold text-amber-400 font-mono" id="stat-tramitacao">4</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl border border-emerald-800/40 bg-emerald-950/10">
+                        <div class="text-xs text-emerald-300 font-mono mb-1">Aprovadas</div>
+                        <div class="text-2xl font-extrabold text-emerald-400 font-mono" id="stat-aprovadas">3</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT & FILTERS -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        
+        <!-- CATEGORY FILTER PILLS -->
+        <div class="flex items-center justify-between gap-4 pb-6 border-b border-slate-800/80 mb-8 overflow-x-auto no-scrollbar">
+            <div class="flex items-center gap-2 min-w-max" id="filter-container">
+                <button data-filter="all" class="filter-btn active-filter px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all flex items-center gap-2 bg-violet-600 text-white shadow-lg shadow-violet-600/30">
+                    <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+                    <span>Todas</span>
+                    <span class="ml-1 px-1.5 py-0.5 rounded-md bg-white/20 text-[10px]" id="count-all">10</span>
+                </button>
+                <button data-filter="Destaque da Semana" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all flex items-center gap-2 bg-slate-900 border border-slate-800 text-slate-300 hover:border-violet-500/50 hover:text-white">
+                    <span class="w-2 h-2 rounded-full bg-violet-400 animate-pulse"></span>
+                    <span>Destaques</span>
+                    <span class="ml-1 px-1.5 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px]" id="count-destaque">2</span>
+                </button>
+                <button data-filter="Em Tramitação" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all flex items-center gap-2 bg-slate-900 border border-slate-800 text-slate-300 hover:border-amber-500/50 hover:text-white">
+                    <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                    <span>Em Tramitação</span>
+                    <span class="ml-1 px-1.5 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px]" id="count-tramitacao">4</span>
+                </button>
+                <button data-filter="Aprovada" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all flex items-center gap-2 bg-slate-900 border border-slate-800 text-slate-300 hover:border-emerald-500/50 hover:text-white">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span>Aprovadas</span>
+                    <span class="ml-1 px-1.5 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px]" id="count-aprovada">3</span>
+                </button>
+                <button data-filter="Rejeitada / Arquivada" class="filter-btn px-4 py-2 rounded-xl text-xs font-semibold font-mono transition-all flex items-center gap-2 bg-slate-900 border border-slate-800 text-slate-300 hover:border-rose-500/50 hover:text-white">
+                    <span class="w-2 h-2 rounded-full bg-rose-400"></span>
+                    <span>Rejeitadas / Arquivadas</span>
+                    <span class="ml-1 px-1.5 py-0.5 rounded-md bg-slate-800 text-slate-400 text-[10px]" id="count-rejeitada">2</span>
+                </button>
+            </div>
+            
+            <div class="text-xs text-slate-500 font-mono hidden xl:block">
+                Exibindo <span id="visible-count" class="text-slate-300 font-bold">10</span> resultados
+            </div>
+        </div>
+
+        <!-- PEC CARDS CONTAINER -->
+        <div id="pec-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Os cards serão gerados dinamicamente via JS -->
+        </div>
+
+        <!-- EMPTY STATE (Quando nenhuma PEC é encontrada) -->
+        <div id="empty-state" class="hidden text-center py-16 glass-panel rounded-2xl border border-slate-800 my-8">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800 text-slate-500">
+                <i data-lucide="search-x" class="w-8 h-8"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">Nenhuma PEC encontrada</h3>
+            <p class="text-slate-400 text-sm max-w-md mx-auto mb-6">Tente ajustar seus termos de busca ou selecione outra categoria de filtro.</p>
+            <button id="reset-filters-btn" class="px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white text-xs font-mono font-semibold rounded-xl transition-all">
+                Resetar Filtros
+            </button>
+        </div>
+
+    </main>
+
+    <!-- MODAL DE PLACAR DE VOTAÇÃO -->
+    <div id="vote-modal-backdrop" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+        <div id="vote-modal-card" class="bg-[#0f172a] border border-slate-800 w-full max-w-3xl rounded-2xl shadow-2xl overflow-hidden animate-modal my-auto">
+            
+            <!-- MODAL HEADER -->
+            <div class="p-5 sm:p-6 border-b border-slate-800/80 flex items-start justify-between gap-4 bg-slate-900/60">
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span id="modal-pec-number" class="text-xs font-mono font-bold text-violet-400 bg-violet-950/80 px-2.5 py-1 rounded-md border border-violet-800/50">
+                            PEC 00/0000
+                        </span>
+                        <span id="modal-pec-badge" class="text-xs font-mono font-medium px-2.5 py-1 rounded-md">
+                            Status
+                        </span>
+                    </div>
+                    <h3 id="modal-pec-title" class="text-xl sm:text-2xl font-bold text-white leading-tight">
+                        Nome da PEC
+                    </h3>
+                </div>
+                <button id="close-modal-btn" class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-all">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- MODAL BODY -->
+            <div class="p-5 sm:p-6 space-y-6">
+                
+                <!-- PLACAR STATS BAR -->
+                <div class="bg-slate-900/90 rounded-xl p-4 border border-slate-800">
+                    <div class="flex justify-between items-center mb-2 text-xs font-mono">
+                        <span class="text-emerald-400 font-bold flex items-center gap-1.5">
+                            <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> A FAVOR: <span id="modal-yes-count">0</span>
+                        </span>
+                        <span class="text-rose-400 font-bold flex items-center gap-1.5">
+                            <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i> CONTRA: <span id="modal-no-count">0</span>
+                        </span>
+                        <span class="text-slate-400 font-bold flex items-center gap-1.5">
+                            <i data-lucide="minus-circle" class="w-3.5 h-3.5"></i> ABSTENÇÃO: <span id="modal-abstain-count">0</span>
+                        </span>
+                    </div>
+
+                    <!-- PROGRESS BAR -->
+                    <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden flex">
+                        <div id="bar-yes" class="bg-emerald-500 h-full transition-all duration-500" style="width: 50%"></div>
+                        <div id="bar-no" class="bg-rose-500 h-full transition-all duration-500" style="width: 30%"></div>
+                        <div id="bar-abstain" class="bg-slate-500 h-full transition-all duration-500" style="width: 20%"></div>
+                    </div>
+                </div>
+
+                <!-- FILTER LEGISLATORS -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                    <h4 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i data-lucide="users" class="w-4 h-4 text-violet-400"></i>
+                        Votação Nominal dos Parlamentares
+                    </h4>
+                    <div class="flex items-center gap-2">
+                        <div class="relative flex-1 sm:w-48">
+                            <input 
+                                type="text" 
+                                id="modal-search-deputy" 
+                                placeholder="Filtrar parlamentar..." 
+                                class="w-full bg-slate-900 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-violet-500"
+                            >
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-500 absolute left-2.5 top-1/2 -translate-y-1/2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEGISLATOR LIST -->
+                <div id="modal-legislators-list" class="max-h-64 overflow-y-auto space-y-2 pr-1">
+                    <!-- Injetado dinamicamente via JS -->
+                </div>
+
+            </div>
+
+            <!-- MODAL FOOTER -->
+            <div class="p-4 border-t border-slate-800 bg-slate-900/50 flex justify-end">
+                <button id="modal-close-footer" class="px-5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono font-semibold rounded-xl transition-all">
+                    Fechar Janela
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- SCRIPT DA APLICAÇÃO -->
+    <script>
+        // DADOS MOCKADOS COMPLETOS DAS 10 PECs
+        const pecsData = [
+            {
+                id: 1,
+                number: "PEC 33/2024",
+                popularName: "PEC da Escala 6x1",
+                author: "Dep. Erika Hilton",
+                party: "PSOL/SP",
+                status: "Destaque da Semana",
+                statusType: "destaque",
+                highlights: [
+                    "Fim do modelo de trabalho de 6 dias de trabalho para 1 de descanso.",
+                    "Redução da jornada máxima semanal de 44h para 36h sem redução salarial.",
+                    "Incentivo à adoção de escalas flexíveis (como 4x3) por acordo coletivo."
+                ],
+                votes: { yes: 194, no: 120, abstain: 15 },
+                congressLink: "https://www.camara.leg.br",
+                pdfLink: "https://www.camara.leg.br",
+                legislators: [
+                    { name: "Erika Hilton", party: "PSOL/SP", vote: "yes" },
+                    { name: "Guilherme Boulos", party: "PSOL/SP", vote: "yes" },
+                    { name: "Tabata Amaral", party: "PSB/SP", vote: "yes" },
+                    { name: "Nikolas Ferreira", party: "PL/MG", vote: "no" },
+                    { name: "Kim Kataguiri", party: "UNIÃO/SP", vote: "no" },
+                    { name: "Carla Zambelli", party: "PL/SP", vote: "no" },
+                    { name: "Jandira Feghali", party: "PCdoB/RJ", vote: "yes" },
+                    { name: "Eduardo Bolsonaro", party: "PL/SP", vote: "no" }
+                ]
+            },
+            {
+                id: 2,
+                number: "PEC 45/2023",
+                popularName: "PEC da Transição Energética",
+                author: "Sen. Rodrigo Pacheco",
+                party: "PSD/MG",
+                status: "Em Tramitação",
+                statusType: "tramitacao",
+                highlights: [
+                    "Criação do Fundo Constitucional de Descarbonização Industrial.",
+                    "Isenção de tributos federais para equipamentos de energia solar e eólica.",
+                    "Metas obrigatórias de neutralidade de carbono no setor produtivo até 2045."
+                ],
+                votes: { yes: 210, no: 45, abstain: 10 },
+                congressLink: "https://www12.senado.leg.br",
+                pdfLink: "https://www12.senado.leg.br",
+                legislators: [
+                    { name: "Rodrigo Pacheco", party: "PSD/MG", vote: "yes" },
+                    { name: "Randolfe Rodrigues", party: "PT/AP", vote: "yes" },
+                    { name: "Tereza Cristina", party: "PP/MS", vote: "no" },
+                    { name: "Hamilton Mourão", party: "Republicanos/RS", vote: "no" },
+                    { name: "Marina Silva", party: "REDE/SP", vote: "yes" }
+                ]
+            },
+            {
+                id: 3,
+                number: "PEC 9/2023",
+                popularName: "PEC da Anistia aos Partidos",
+                author: "Dep. Antonio Carlos Rodrigues",
+                party: "PL/SP",
+                status: "Aprovada",
+                statusType: "aprovada",
+                highlights: [
+                    "Perdão total de multas por descumprimento de cotas de raça e gênero.",
+                    "Refinanciamento de dívidas partidárias em até 180 meses.",
+                    "Permissão para uso de verba de fundos públicos para quitação de penalidades."
+                ],
+                votes: { yes: 344, no: 132, abstain: 4 },
+                congressLink: "https://www.camara.leg.br",
+                pdfLink: "https://www.camara.leg.br",
+                legislators: [
+                    { name: "Arthur Lira", party: "PP/AL", vote: "yes" },
+                    { name: "Gleisi Hoffmann", party: "PT/PR", vote: "yes" },
+                    { name: "Altineu Côrtes", party: "PL/RJ", vote: "yes" },
+                    { name: "Luiza Erundina", party: "PSOL/SP", vote: "no" },
+                    { name: "Marcel van Hattem", party: "NOVO/RS", vote: "no" }
+                ]
+            },
+            {
+                id: 4,
+                number: "PEC 18/2024",
+                popularName: "PEC da Segurança Pública",
+                author: "Executivo Federal",
+                party: "GOV",
+                status: "Destaque da Semana",
+                statusType: "destaque",
+                highlights: [
+                    "Constitucionalização do SUSP (Sistema Único de Segurança Pública).",
+                    "Ampliação do papel da Polícia Rodoviária Federal (PRF) para hidrovias e ferrovias.",
+                    "Padronização e integração nacional de inteligência criminal entre os estados."
+                ],
+                votes: { yes: 180, no: 90, abstain: 20 },
+                congressLink: "https://www.camara.leg.br",
+                pdfLink: "https://www.camara.leg.br",
+                legislators: [
+                    { name: "Rui Costa", party: "PT/BA", vote: "yes" },
+                    { name: "Sérgio Moro", party: "UNIÃO/PR", vote: "no" },
+                    { name: "Alberto Fraga", party: "PL/DF", vote: "no" },
+                    { name: "Delegado Bilynskyj", party: "PL/SP", vote: "no" }
+                ]
+            },
+            {
+                id: 5,
+                number: "PEC 3/2022",
+                popularName: "PEC das Praias / Terrenos de Marinha",
+                author: "Dep. Arnaldo Jordy",
+                party: "PPS/PA",
+                status: "Rejeitada / Arquivada",
+                statusType: "rejeitada",
+                highlights: [
+                    "Fim do instituto do aforamento e transferência total a ocupantes privados.",
+                    "Repasse de terrenos costeiros federais para municípios e estados.",
+                    "Preocupações sobre riscos ao livre acesso público às praias do país."
+                ],
+                votes: { yes: 110, no: 320, abstain: 15 },
+                congressLink: "https://www.camara.leg.br",
+                pdfLink: "https://www.camara.leg.br",
+                legislators: [
+                    { name: "Flávio Bolsonaro", party: "PL/RJ", vote: "yes" },
+                    { name: "Teresa Leitão", party: "PT/PE", vote: "no" },
+                    { name: "Rogério Carvalho", party: "PT/SE", vote: "no" },
+                    { name: "Ciro Nogueira", party: "PP/PI", vote: "yes" }
+                ]
+            },
+            {
+                id: 6,
+                number: "PEC 10/2023",
+                popularName: "PEC do Quinquênio",
+                author: "Sen. Rodrigo Pacheco",
+                party: "PSD/MG",
+                status: "Em Tramitação",
+                statusType: "tramitacao",
+                highlights: [
+                    "Bônus automático de 5% a cada 5 anos no salário de juízes e promotores.",
+                    "Aplicação estendida a membros da Defensoria Pública e Advocacia da União.",
+                    "Adicional salarial pago fora do teto constitucional do funcionalismo."
+                ],
+                votes: { yes: 150, no: 140, abstain: 30 },
+                congressLink: "https://www12.senado.leg.br",
+                pdfLink: "https://www12.senado.leg.br",
+                legislators: [
+                    { name: "Rodrigo Pacheco", party: "PSD/MG", vote: "yes" },
+                    { name: "Jaques Wagner", party: "PT/BA", vote: "no" },
+                    { name: "Oriovisto Guimarães", party: "Podemos/PR", vote: "no" },
+                    { name: "Omar Aziz", party: "PSD/AM", vote: "yes" }
+                ]
+            },
+            {
+                id: 7,
+                number: "PEC 5/2023",
+                popularName: "PEC da Imunidade Tributária Religiosa",
+                author: "Dep. Marcelo Crivella",
+                party: "Republicanos/RJ",
+                status: "Aprovada",
+                statusType: "aprovada",
+                highlights: [
+                    "Extensão da imunidade de tributos na compra de bens e serviços por igrejas.",
+                    "Inclusão de creches, asilos e entidades de assistência ligadas a templos.",
+                    "Isenção de IPVA e ITBI para imóveis e veículos registrados em nome da entidade."
+                ],
+                votes: { yes: 393, no: 38, abstain: 5 },
+                congressLink: "https://www.camara.leg.br",
+                pdfLink: "https://www.camara.leg.br",
+                legislators: [
+                    { name: "Marcelo Crivella", party: "Republicanos/RJ", vote: "yes" },
+                    { name: "Sóstenes Cavalcante", party: "PL/RJ", vote: "yes" },
+                    { name: "Pastor Henrique Vieira", party: "PSOL/RJ", vote: "no" },
+                    { name: "Sâmia Bomfim", party: "PSOL/SP", vote: "no" }
+                ]
+            },
+            {
+                id: 8,
+                number: "PEC 45/2019",
+                popularName: "PEC da Reforma Tributária",
+                author: "Dep. Baleia Rossi",
+                party: "MDB/SP",
+                status: "Aprovada",
+                statusType: "aprovada",
+                highlights: [
+                    "Substituição de 5 impostos (PIS, Cofins, IPI, ICMS, ISS) pelo IVA Dual (IBS/CBS).",
+                    "Criação da Cesta Básica Nacional com alíquota zero de tributação.",
+                    "Sistema de Cashback do imposto para famílias de baixa renda salarial."
+                ],
+                votes: { yes: 375, no: 113, abstain: 1 },
+                congressLink: "https://www.camara.leg.br",
+                pdfLink: "https://www.camara.leg.br",
+                legislators: [
+                    { name: "Baleia Rossi", party: "MDB/SP", vote: "yes" },
+                    { name: "Reginaldo Lopes", party: "PT/MG", vote: "yes" },
+                    { name: "Aguinaldo Ribeiro", party: "PP/PB", vote: "yes" },
+                    { name: "Carla Zambelli", party: "PL/SP", vote: "no" }
+                ]
+            },
+            {
+                id: 9,
+                number: "PEC 8/2021",
+                popularName: "PEC do Limite de Poderes do STF",
+                author: "Sen. Oriovisto Guimarães",
+                party: "Podemos/PR",
+                status: "Em Tramitação",
+                statusType: "tramitacao",
+                highlights: [
+                    "Proibição de decisões monocráticas individuais que suspendam leis federais.",
+                    "Exigência de maioria absoluta do plenário para concessão de liminares.",
+                    "Prazo fixo limite de 6 meses para pedidos de vista em processos."
+                ],
+                votes: { yes: 260, no: 110, abstain: 12 },
+                congressLink: "https://www12.senado.leg.br",
+                pdfLink: "https://www12.senado.leg.br",
+                legislators: [
+                    { name: "Oriovisto Guimarães", party: "Podemos/PR", vote: "yes" },
+                    { name: "Magno Malta", party: "PL/ES", vote: "yes" },
+                    { name: "Humberto Costa", party: "PT/PE", vote: "no" },
+                    { name: "Fabiano Contarato", party: "PT/ES", vote: "no" }
+                ]
+            },
+            {
+                id: 10,
+                number: "PEC 65/2023",
+                popularName: "PEC da Autonomia do Banco Central",
+                author: "Sen. Vanderlan Cardoso",
+                party: "PSD/GO",
+                status: "Rejeitada / Arquivada",
+                statusType: "rejeitada",
+                highlights: [
+                    "Transformação do Banco Central de autarquia em empresa pública autônoma.",
+                    "Autonomia orçamentária própria desvinculada do Orçamento Geral da União.",
+                    "Livre gestão de quadros de pessoal fora das regras tradicionais do serviço público."
+                ],
+                votes: { yes: 95, no: 280, abstain: 22 },
+                congressLink: "https://www12.senado.leg.br",
+                pdfLink: "https://www12.senado.leg.br",
+                legislators: [
+                    { name: "Vanderlan Cardoso", party: "PSD/GO", vote: "yes" },
+                    { name: "Lindbergh Farias", party: "PT/RJ", vote: "no" },
+                    { name: "Gleisi Hoffmann", party: "PT/PR", vote: "no" }
+                ]
+            }
+        ];
+
+        // ESTADO GLOBAL DA APLICAÇÃO
+        let activeFilter = 'all';
+        let searchQuery = '';
+        let currentOpenPec = null;
+
+        // HELPER DE CORES DE STATUS
+        function getStatusBadgeHtml(status) {
+            switch(status) {
+                case 'Destaque da Semana':
+                    return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-violet-950/80 text-violet-300 border border-violet-700/60 shadow-sm shadow-violet-500/20">
+                                <span class="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse"></span>
+                                Destaque da Semana
+                            </span>`;
+                case 'Aprovada':
+                    return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-700/60">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                Aprovada
+                            </span>`;
+                case 'Em Tramitação':
+                    return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-950/80 text-amber-300 border border-amber-700/60">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                                Em Tramitação
+                            </span>`;
+                case 'Rejeitada / Arquivada':
+                    return `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-rose-950/80 text-rose-300 border border-rose-700/60">
+                                <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                                Rejeitada
+                            </span>`;
+                default:
+                    return `<span class="px-2.5 py-1 rounded-full text-xs font-mono bg-slate-800 text-slate-300">${status}</span>`;
+            }
+        }
+
+        function getGlowClass(status) {
+            switch(status) {
+                case 'Destaque da Semana': return 'glow-purple';
+                case 'Aprovada': return 'glow-emerald';
+                case 'Em Tramitação': return 'glow-amber';
+                case 'Rejeitada / Arquivada': return 'glow-rose';
+                default: return '';
+            }
+        }
+
+        // RENDERIZAR GRAPHO DE CARDS
+        function renderPecs() {
+            const grid = document.getElementById('pec-grid');
+            const emptyState = document.getElementById('empty-state');
+            
+            // Filtrar itens
+            const filtered = pecsData.filter(pec => {
+                const matchesFilter = (activeFilter === 'all') || (pec.status === activeFilter);
+                const query = searchQuery.toLowerCase().trim();
+                const matchesSearch = !query || 
+                    pec.popularName.toLowerCase().includes(query) ||
+                    pec.number.toLowerCase().includes(query) ||
+                    pec.author.toLowerCase().includes(query) ||
+                    pec.party.toLowerCase().includes(query);
+                
+                return matchesFilter && matchesSearch;
+            });
+
+            document.getElementById('visible-count').textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            grid.innerHTML = filtered.map(pec => {
+                const totalVotes = pec.votes.yes + pec.votes.no + pec.votes.abstain;
+                const yesPercent = Math.round((pec.votes.yes / totalVotes) * 100);
+
+                return `
+                    <div class="glass-panel p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition-all duration-300 flex flex-col justify-between ${getGlowClass(pec.status)} group">
+                        
+                        <div>
+                            <!-- TOP ROW (NUMBER & BADGE) -->
+                            <div class="flex items-start justify-between gap-3 mb-3">
+                                <div>
+                                    <span class="text-xs font-mono font-bold text-slate-400 bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-800">
+                                        ${pec.number}
+                                    </span>
+                                </div>
+                                <div>
+                                    ${getStatusBadgeHtml(pec.status)}
+                                </div>
+                            </div>
+
+                            <!-- TITLE & AUTHOR -->
+                            <h3 class="text-xl font-bold text-white group-hover:text-violet-300 transition-colors mb-2">
+                                ${pec.popularName}
+                            </h3>
+                            
+                            <div class="flex items-center gap-2 text-xs text-slate-400 mb-5 font-mono">
+                                <div class="w-5 h-5 rounded-full bg-violet-900/60 text-violet-300 border border-violet-700/50 flex items-center justify-center font-bold text-[10px]">
+                                    ${pec.author.charAt(0)}
+                                </div>
+                                <span>Autor: <strong class="text-slate-200">${pec.author}</strong> (${pec.party})</span>
+                            </div>
+
+                            <!-- PATCH HIGHLIGHTS -->
+                            <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800/80 mb-5">
+                                <div class="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                                    <i data-lucide="list-checks" class="w-3.5 h-3.5 text-violet-400"></i>
+                                    Mudanças Propostas (Patch Highlights)
+                                </div>
+                                <ul class="space-y-2 text-xs text-slate-300">
+                                    ${pec.highlights.map(h => `
+                                        <li class="flex items-start gap-2">
+                                            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-violet-400 shrink-0 mt-0.5"></i>
+                                            <span>${h}</span>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- VOTING RATIO MINI BAR & ACTION BUTTONS -->
+                        <div>
+                            <div class="mb-4">
+                                <div class="flex justify-between items-center text-[11px] font-mono mb-1">
+                                    <span class="text-slate-400">Aprovação no Plenário</span>
+                                    <span class="text-emerald-400 font-bold">${yesPercent}% A favor</span>
+                                </div>
+                                <div class="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden flex">
+                                    <div class="bg-emerald-500 h-full" style="width: ${yesPercent}%"></div>
+                                    <div class="bg-rose-500 h-full" style="width: ${100 - yesPercent}%"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 pt-2 border-t border-slate-800/60">
+                                <button 
+                                    onclick="openModal(${pec.id})"
+                                    class="flex-1 py-2.5 px-4 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 shadow-lg shadow-violet-600/20 transition-all active:scale-[0.98]"
+                                >
+                                    <i data-lucide="vote" class="w-4 h-4"></i>
+                                    Ver Placar
+                                </button>
+                                <button 
+                                    onclick="showToast('Redirecionando para o portal do Congresso...')" 
+                                    class="p-2.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white rounded-xl border border-slate-800 transition-all"
+                                    title="Acessar no site do Congresso"
+                                >
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </button>
+                                <button 
+                                    onclick="showToast('Download do PDF do texto original iniciado!')" 
+                                    class="p-2.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white rounded-xl border border-slate-800 transition-all"
+                                    title="Baixar Texto da PEC em PDF"
+                                >
+                                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                `;
+            }).join('');
+
+            // Recriar ícones
+            lucide.createIcons();
+        }
+
+        // CONTROLADORES DE MODAL DE VOTAÇÃO
+        function openModal(pecId) {
+            const pec = pecsData.find(p => p.id === pecId);
+            if(!pec) return;
+
+            currentOpenPec = pec;
+
+            document.getElementById('modal-pec-number').textContent = pec.number;
+            document.getElementById('modal-pec-title').textContent = pec.popularName;
+            
+            const badgeEl = document.getElementById('modal-pec-badge');
+            badgeEl.className = 'text-xs font-mono font-medium px-2.5 py-1 rounded-md';
+            
+            if(pec.status === 'Destaque da Semana') {
+                badgeEl.classList.add('bg-violet-950', 'text-violet-300', 'border', 'border-violet-800');
+            } else if(pec.status === 'Aprovada') {
+                badgeEl.classList.add('bg-emerald-950', 'text-emerald-300', 'border', 'border-emerald-800');
+            } else if(pec.status === 'Em Tramitação') {
+                badgeEl.classList.add('bg-amber-950', 'text-amber-300', 'border', 'border-amber-800');
+            } else {
+                badgeEl.classList.add('bg-rose-950', 'text-rose-300', 'border', 'border-rose-800');
+            }
+            badgeEl.textContent = pec.status;
+
+            // Preencher Placar
+            document.getElementById('modal-yes-count').textContent = pec.votes.yes;
+            document.getElementById('modal-no-count').textContent = pec.votes.no;
+            document.getElementById('modal-abstain-count').textContent = pec.votes.abstain;
+
+            const total = pec.votes.yes + pec.votes.no + pec.votes.abstain;
+            document.getElementById('bar-yes').style.width = `${(pec.votes.yes/total)*100}%`;
+            document.getElementById('bar-no').style.width = `${(pec.votes.no/total)*100}%`;
+            document.getElementById('bar-abstain').style.width = `${(pec.votes.abstain/total)*100}%`;
+
+            renderLegislators();
+
+            document.getElementById('vote-modal-backdrop').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('vote-modal-backdrop').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            currentOpenPec = null;
+        }
+
+        function renderLegislators() {
+            if(!currentOpenPec) return;
+
+            const container = document.getElementById('modal-legislators-list');
+            const searchDeputy = document.getElementById('modal-search-deputy').value.toLowerCase().trim();
+
+            const filtered = currentOpenPec.legislators.filter(l => 
+                l.name.toLowerCase().includes(searchDeputy) || 
+                l.party.toLowerCase().includes(searchDeputy)
+            );
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-xs text-slate-500 font-mono">Nenhum parlamentar encontrado para este filtro.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(leg => `
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-900 border border-slate-800/80">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center font-mono font-bold text-xs text-slate-300 border border-slate-700">
+                            ${leg.name.charAt(0)}
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-white">${leg.name}</div>
+                            <div class="text-[10px] font-mono text-slate-400">${leg.party}</div>
+                        </div>
+                    </div>
+                    <div>
+                        ${leg.vote === 'yes' ? 
+                            `<span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-emerald-950 text-emerald-300 border border-emerald-800">A FAVOR</span>` :
+                            `<span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-rose-950 text-rose-300 border border-rose-800">CONTRA</span>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // TOAST SYSTEM
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'glass-panel px-4 py-3 rounded-xl border border-violet-500/40 text-xs text-slate-100 flex items-center gap-2 shadow-xl animate-modal pointer-events-auto';
+            toast.innerHTML = `
+                <i data-lucide="info" class="w-4 h-4 text-violet-400"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // EVENT LISTENERS E INICIALIZAÇÃO
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Render Inicial
+            renderPecs();
+
+            // Filtros de Categoria
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('bg-violet-600', 'text-white', 'shadow-lg', 'shadow-violet-600/30');
+                        b.classList.add('bg-slate-900', 'text-slate-300', 'border-slate-800');
+                    });
+
+                    const target = e.currentTarget;
+                    target.classList.remove('bg-slate-900', 'text-slate-300', 'border-slate-800');
+                    target.classList.add('bg-violet-600', 'text-white', 'shadow-lg', 'shadow-violet-600/30');
+
+                    activeFilter = target.getAttribute('data-filter');
+                    renderPecs();
+                });
+            });
+
+            // Input de Busca
+            const searchInput = document.getElementById('search-input');
+            const searchInputMobile = document.getElementById('search-input-mobile');
+            const clearBtn = document.getElementById('clear-search');
+
+            function handleSearch(val) {
+                searchQuery = val;
+                if(val) {
+                    clearBtn.classList.remove('hidden');
+                } else {
+                    clearBtn.classList.add('hidden');
+                }
+                renderPecs();
+            }
+
+            searchInput.addEventListener('input', (e) => handleSearch(e.target.value));
+            searchInputMobile.addEventListener('input', (e) => handleSearch(e.target.value));
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                searchInputMobile.value = '';
+                handleSearch('');
+            });
+
+            document.getElementById('reset-filters-btn').addEventListener('click', () => {
+                activeFilter = 'all';
+                searchQuery = '';
+                searchInput.value = '';
+                searchInputMobile.value = '';
+                clearBtn.classList.add('hidden');
+                
+                // Resetar botão ativo
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-violet-600', 'text-white', 'shadow-lg', 'shadow-violet-600/30');
+                    b.classList.add('bg-slate-900', 'text-slate-300', 'border-slate-800');
+                });
+                document.querySelector('[data-filter="all"]').classList.add('bg-violet-600', 'text-white', 'shadow-lg', 'shadow-violet-600/30');
+
+                renderPecs();
+            });
+
+            // Eventos do Modal
+            document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+            document.getElementById('modal-close-footer').addEventListener('click', closeModal);
+            document.getElementById('vote-modal-backdrop').addEventListener('click', (e) => {
+                if(e.target.id === 'vote-modal-backdrop') closeModal();
+            });
+
+            document.getElementById('modal-search-deputy').addEventListener('input', renderLegislators);
+
+            // Tecla ESC fecha modal
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape') closeModal();
+            });
+
+        });
+    </script>
+
+</body>
+</html>
